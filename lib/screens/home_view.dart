@@ -1,6 +1,7 @@
 import 'package:brewly/components/button.dart';
 import 'package:brewly/components/coffee_card.dart';
 import 'package:brewly/components/global.dart';
+import 'package:brewly/components/item_card.dart';
 import 'package:flutter/material.dart';
 
 class HomeView extends StatefulWidget {
@@ -113,43 +114,47 @@ class _HomeViewState extends State<HomeView> {
                   const SizedBox(
                     height: 20,
                   ),
-                  SizedBox(
-                    height: 50, // Limit the height of ListView
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: coffeeFlavors.length,
-                      itemBuilder: (context, index) {
-                        return CoffeeFlavorCard(
-                          onTap: () {
-                            selectedFlavorIndex =
-                                index; // Update the selected index
-                            setState(() {});
-                          },
-                          flavorName: coffeeFlavors[index],
-                          isSelected: selectedFlavorIndex == index,
-                        );
-                      },
-                      separatorBuilder: (context, index) =>
-                          const SizedBox(width: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 32),
+                    child: SizedBox(
+                      height: 50, // Limit the height of ListView
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: coffeeFlavors.length,
+                        itemBuilder: (context, index) {
+                          return CoffeeFlavorCard(
+                            onTap: () {
+                              selectedFlavorIndex =
+                                  index; // Update the selected index
+                              setState(() {});
+                            },
+                            flavorName: coffeeFlavors[index],
+                            isSelected: selectedFlavorIndex == index,
+                          );
+                        },
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(width: 10),
+                      ),
                     ),
                   ),
                   const SizedBox(
                     height: 20,
                   ),
                   Expanded(
-                    child: GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisSpacing: 20,
-                              crossAxisCount: 2,
-                              mainAxisSpacing: 20),
-                      itemCount: 20,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          height: 100,
-                          color: Colors.amber,
-                        );
-                      },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 45),
+                      child: GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            childAspectRatio:
+                                (mediaWidth * 0.4) / (mediaHeight * 0.3),
+                            crossAxisSpacing: 20,
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 20),
+                        itemCount: 20,
+                        itemBuilder: (context, index) {
+                          return ItemCard();
+                        },
+                      ),
                     ),
                   ),
                 ],
