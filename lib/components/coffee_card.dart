@@ -24,13 +24,6 @@ class CoffeeFlavorCard extends StatelessWidget {
               : const Color(
                   0xffEDEDED), // Brown background color for coffee theme
           borderRadius: BorderRadius.circular(15.0),
-          boxShadow: [
-            // BoxShadow(
-            //   color: Colors.black.withOpacity(0.1),
-            //   blurRadius: 10.0,
-            //   offset: const Offset(2, 2),
-            // ),
-          ],
         ),
         child: Center(
           child: Text(

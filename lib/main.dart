@@ -1,3 +1,4 @@
+import 'package:brewly/screens/detailItem_view.dart';
 import 'package:brewly/screens/home_view.dart';
 import 'package:brewly/screens/onboarding_view.dart';
 import 'package:flutter/material.dart';
@@ -15,14 +16,13 @@ class MyApp extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return MaterialApp(
-        theme: ThemeData(
-          textTheme: GoogleFonts.soraTextTheme(textTheme).copyWith(
-            bodyMedium: GoogleFonts.sora(textStyle: textTheme.bodyMedium),
-          ),
+      theme: ThemeData(
+        textTheme: GoogleFonts.soraTextTheme(textTheme).copyWith(
+          bodyMedium: GoogleFonts.sora(textStyle: textTheme.bodyMedium),
         ),
-        debugShowCheckedModeBanner: false,
-        home: const HomeView()
-        //  const OnboardingView(),
-        );
+      ),
+      debugShowCheckedModeBanner: false,
+      home: const OnboardingView(),
+    );
   }
 }

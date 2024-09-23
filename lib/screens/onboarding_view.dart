@@ -1,4 +1,5 @@
 import 'package:brewly/components/button.dart';
+import 'package:brewly/screens/home_view.dart';
 import 'package:flutter/material.dart';
 
 class OnboardingView extends StatefulWidget {
@@ -90,7 +91,14 @@ class _OnboardingViewState extends State<OnboardingView> {
                   height: 25,
                 ),
                 CustomButton(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HomeView(),
+                      ),
+                    );
+                  },
                   buttonText: "Get Started",
                 ),
               ],

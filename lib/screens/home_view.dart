@@ -1,7 +1,12 @@
+import 'dart:developer';
+
 import 'package:brewly/components/button.dart';
 import 'package:brewly/components/coffee_card.dart';
+import 'package:brewly/components/custom_colors.dart';
 import 'package:brewly/components/global.dart';
 import 'package:brewly/components/item_card.dart';
+import 'package:brewly/data/data.dart';
+import 'package:brewly/screens/detailItem_view.dart';
 import 'package:flutter/material.dart';
 
 class HomeView extends StatefulWidget {
@@ -13,6 +18,28 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   int? selectedFlavorIndex;
+  List items = CoffeeShopItems().itemList;
+  String? selectedCategory;
+  List filteredItems = []; // Filtered coffee list
+  List coffeeFlavors = CoffeeShopItems().coffeeFlavors;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    filteredItems = items; // Initially display all items
+
+    super.initState();
+  }
+
+  void filterItemsByCategory(String? category) {
+    if (category == null || category == 'All Coffee') {
+      filteredItems = items; // Show all items if no category is selected
+    } else {
+      filteredItems =
+          items.where((item) => item['category'] == category).toList();
+    }
+    setState(() {}); // Update the UI
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,144 +51,188 @@ class _HomeViewState extends State<HomeView> {
 
     return Scaffold(
       extendBody: true,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // AppBar Section
-            Container(
-              color: const Color(0xff313131),
-              height: appBarH,
-              width: mediaWidth,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(18, 0, 0, 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 50),
-                    const Text(
-                      "Location",
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Color(0xffA2A2A2),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                // AppBar Section
+                Container(
+                  color: const Color(0xff313131),
+                  height: appBarH,
+                  width: mediaWidth,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(18, 0, 0, 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 50),
+                        const Text(
+                          "Location",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Color(0xffA2A2A2),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        const Row(
+                          children: [
+                            Text(
+                              "Bilzen, Tanjungbalai",
+                              style: TextStyle(color: Color(0xffD8D8D8)),
+                            ),
+                            Icon(
+                              Icons.keyboard_arrow_down,
+                              color: Color(0xffD8D8D8),
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12.0),
+                                color: const Color(0xff2A2A2A),
+                              ),
+                              width: mediaWidth * 0.70,
+                              height: mediaHeight * 0.1,
+                              child: const Row(
+                                children: [
+                                  SizedBox(width: 10),
+                                  Icon(
+                                    Icons.search,
+                                    color: Color(0xffFFFFFF),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    "Search coffee",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Color(0xffA2A2A2),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            CustomButton(
+                              buttonIcon: const Icon(
+                                Icons.filter_list,
+                                color: Colors.white,
+                              ),
+                              buttonText: "",
+                              onTap: () {},
+                              buttonWidth: mediaWidth * 0.2,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                // Body Section
+
+                Container(
+                  height: bodyH,
+                  decoration: BoxDecoration(
+                    color: CustomColors().grey1,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 100,
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    const Row(
-                      children: [
-                        Text(
-                          "Bilzen, Tanjungbalai",
-                          style: TextStyle(color: Color(0xffD8D8D8)),
-                        ),
-                        Icon(
-                          Icons.keyboard_arrow_down,
-                          color: Color(0xffD8D8D8),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12.0),
-                            color: const Color(0xff2A2A2A),
-                          ),
-                          width: mediaWidth * 0.70,
-                          height: mediaHeight * 0.1,
-                          child: const Row(
-                            children: [
-                              SizedBox(width: 10),
-                              Icon(
-                                Icons.search,
-                                color: Color(0xffFFFFFF),
-                              ),
-                              SizedBox(width: 10),
-                              Text(
-                                "Search coffee",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Color(0xffA2A2A2),
-                                ),
-                              ),
-                            ],
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 32),
+                        child: SizedBox(
+                          height: 50, // Limit the height of ListView
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: coffeeFlavors.length,
+                            itemBuilder: (context, index) {
+                              return CoffeeFlavorCard(
+                                onTap: () {
+                                  selectedFlavorIndex =
+                                      index; // Update the selected index
+                                  selectedCategory = coffeeFlavors[
+                                      index]; // Set selected category
+                                  filterItemsByCategory(
+                                      selectedCategory); // Filter items
+                                  setState(() {
+                                    log(filteredItems.length.toString());
+                                  });
+                                },
+                                flavorName: coffeeFlavors[index],
+                                isSelected: selectedFlavorIndex == index,
+                              );
+                            },
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(width: 10),
                           ),
                         ),
-                        const SizedBox(width: 10),
-                        CustomButton(
-                          buttonIcon: const Icon(
-                            Icons.filter_list,
-                            color: Colors.white,
+                      ),
+                      // const SizedBox(
+                      //   height: 20,
+                      // ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 45),
+                          child: GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    childAspectRatio: (mediaWidth * 0.4) /
+                                        (mediaHeight * 0.30),
+                                    crossAxisSpacing: 20,
+                                    crossAxisCount: 2,
+                                    mainAxisSpacing: 20),
+                            itemCount: filteredItems.length,
+                            itemBuilder: (context, index) {
+                              return ItemCard(
+                                onTap: () {
+                                  Navigator.push(context, MaterialPageRoute(
+                                    builder: (context) {
+                                      return DetailitemView(
+                                        itemName: filteredItems[index]['name'],
+                                        tag: filteredItems[index]['tags'][0],
+                                        imagePath: filteredItems[index]['img']
+                                            [0],
+                                      );
+                                    },
+                                  ));
+                                },
+                                itemName: filteredItems[index]['name'],
+                                catergory: filteredItems[index]['category'],
+                                imagePath: filteredItems[index]['img'][0],
+                                price: filteredItems[index]['price'],
+                              );
+                            },
                           ),
-                          buttonText: "",
-                          onTap: () {},
-                          buttonWidth: mediaWidth * 0.2,
                         ),
-                      ],
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            top: appBarH -
+                70, // Adjusting position to overlap both AppBar and Body
+            // left: (mediaWidth / 20), // Center horizontally
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image.asset(
+                  "assets/images/Banner.jpg",
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
-
-            // Body Section
-            Container(
-              height: bodyH,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 32),
-                    child: SizedBox(
-                      height: 50, // Limit the height of ListView
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: coffeeFlavors.length,
-                        itemBuilder: (context, index) {
-                          return CoffeeFlavorCard(
-                            onTap: () {
-                              selectedFlavorIndex =
-                                  index; // Update the selected index
-                              setState(() {});
-                            },
-                            flavorName: coffeeFlavors[index],
-                            isSelected: selectedFlavorIndex == index,
-                          );
-                        },
-                        separatorBuilder: (context, index) =>
-                            const SizedBox(width: 10),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 45),
-                      child: GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            childAspectRatio:
-                                (mediaWidth * 0.4) / (mediaHeight * 0.3),
-                            crossAxisSpacing: 20,
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 20),
-                        itemCount: 20,
-                        itemBuilder: (context, index) {
-                          return ItemCard();
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
