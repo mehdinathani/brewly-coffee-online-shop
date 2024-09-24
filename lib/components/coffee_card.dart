@@ -4,12 +4,14 @@ class CoffeeFlavorCard extends StatelessWidget {
   final String flavorName;
   final bool isSelected;
   final Function()? onTap;
+  final double? boxWidth;
 
   const CoffeeFlavorCard(
       {super.key,
       required this.flavorName,
       required this.isSelected,
-      this.onTap});
+      this.onTap,
+      this.boxWidth});
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +20,7 @@ class CoffeeFlavorCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
         height: 29,
+        width: boxWidth,
         decoration: BoxDecoration(
           color: isSelected
               ? const Color(0xffC67C4E)

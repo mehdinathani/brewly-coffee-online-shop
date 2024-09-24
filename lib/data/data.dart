@@ -1,6 +1,12 @@
 import 'package:brewly/components/images_path.dart';
 
 class CoffeeShopItems {
+  // Make the class a Singleton
+  static final CoffeeShopItems _instance = CoffeeShopItems._internal();
+  factory CoffeeShopItems() => _instance;
+
+  CoffeeShopItems._internal(); // Private constructor
+
   final List<String> coffeeFlavors = [
     'All Coffee',
     'Espresso',
@@ -14,6 +20,13 @@ class CoffeeShopItems {
     'Flat White',
     'Irish Coffee'
   ];
+
+  final List<String> sizes = ["S", "M", "L"];
+  final List<String> dOptions = ['Deliver', 'Pick Up'];
+  List<Map<String, dynamic>> favoriteItems = [];
+  List<Map<String, dynamic>> orderedItems = [];
+  final Map<String, dynamic> selectedItem = {}; // Expect the whole item
+
   List itemList = [
     {
       'name': 'Flat White',

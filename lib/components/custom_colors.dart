@@ -8,4 +8,5 @@ class CustomColors {
   final lightgrey = Color(0xff797979);
   final slightbrown = Color(0xffF9F2ED);
   final lighter = Color(0xffA2A2A2);
+  final boxBorder = Color(0xffEDEDED);
 }

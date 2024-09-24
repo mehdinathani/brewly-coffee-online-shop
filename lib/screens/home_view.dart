@@ -191,13 +191,15 @@ class _HomeViewState extends State<HomeView> {
                             itemBuilder: (context, index) {
                               return ItemCard(
                                 onTap: () {
+                                  log(CoffeeShopItems()
+                                      .orderedItems
+                                      .length
+                                      .toString());
                                   Navigator.push(context, MaterialPageRoute(
                                     builder: (context) {
                                       return DetailitemView(
-                                        itemName: filteredItems[index]['name'],
-                                        tag: filteredItems[index]['tags'][0],
-                                        imagePath: filteredItems[index]['img']
-                                            [0],
+                                        selectedItem: filteredItems[
+                                            index], // Pass the selected item
                                       );
                                     },
                                   ));
