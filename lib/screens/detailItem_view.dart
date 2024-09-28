@@ -4,6 +4,7 @@ import 'package:brewly/components/button.dart';
 import 'package:brewly/components/coffee_card.dart';
 import 'package:brewly/components/custom_colors.dart';
 import 'package:brewly/data/data.dart';
+import 'package:brewly/functions/shopping_cart.dart';
 import 'package:brewly/screens/orders_view.dart';
 import 'package:flutter/material.dart';
 
@@ -17,6 +18,7 @@ class DetailitemView extends StatefulWidget {
 }
 
 class _DetailitemViewState extends State<DetailitemView> {
+  final ShoppingCart _shoppingCart = ShoppingCart();
   void addToFavorites(Map<String, dynamic> item) {
     // Check if item is already in the favorites list
     if (!CoffeeShopItems().favoriteItems.contains(item)) {
@@ -31,12 +33,12 @@ class _DetailitemViewState extends State<DetailitemView> {
     }
   }
 
-  void addToOrders(Map<String, dynamic> item) {
-    setState(() {
-      CoffeeShopItems().orderedItems.add(item); // Add item to the orders list
-    });
-    log("${item['name']} added to orders");
-  }
+  // void addToOrders(Map<String, dynamic> item) {
+  //   setState(() {
+  //     CoffeeShopItems().orderedItems.add(item); // Add item to the orders list
+  //   });
+  //   log("${item['name']} added to orders");
+  // }
 
   int? selectedSizeIndex = 0;
 
@@ -235,9 +237,11 @@ class _DetailitemViewState extends State<DetailitemView> {
                         buttonWidth: 200,
                         buttonText: "Buy Now",
                         onTap: () {
-                          addToOrders(widget.selectedItem);
+                          // addToOrders(widget.selectedItem);
+                          ShoppingCart().addItem(widget.selectedItem);
+                          log(_shoppingCart.orderedItems.toString());
                           setState(() {});
-                          log(CoffeeShopItems().orderedItems.toString());
+                          // log(CoffeeShopItems().orderedItems.toString());
                           Navigator.push(
                             context,
                             MaterialPageRoute(

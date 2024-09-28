@@ -191,10 +191,7 @@ class _HomeViewState extends State<HomeView> {
                             itemBuilder: (context, index) {
                               return ItemCard(
                                 onTap: () {
-                                  log(CoffeeShopItems()
-                                      .orderedItems
-                                      .length
-                                      .toString());
+                                  log("");
                                   Navigator.push(context, MaterialPageRoute(
                                     builder: (context) {
                                       return DetailitemView(

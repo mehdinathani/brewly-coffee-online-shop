@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:brewly/components/button.dart';
 import 'package:brewly/components/coffee_card.dart';
 import 'package:brewly/components/custom_colors.dart';
 import 'package:brewly/data/data.dart';
+import 'package:brewly/functions/shopping_cart.dart';
 import 'package:brewly/screens/delivery_view.dart';
 import 'package:flutter/material.dart';
 
@@ -15,11 +18,22 @@ class OrdersView extends StatefulWidget {
 class _OrdersViewState extends State<OrdersView> {
   int? selectedIndex = 0;
   final dOptions = CoffeeShopItems().dOptions;
-  final ordersList = CoffeeShopItems().orderedItems;
+
+  List ordersList = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    ordersList = ShoppingCart().orderedItems;
+    log(ordersList.toString());
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final mediaH = MediaQuery.of(context).size.height;
     final mediaW = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -218,15 +232,31 @@ class _OrdersViewState extends State<OrdersView> {
                                 width: 24,
                                 height: 24,
                               ),
+                              onTap: () {
+                                ShoppingCart().lessItem(
+                                  ordersList[index],
+                                );
+                                setState(() {
+                                  log(ShoppingCart().orderedItems.toString());
+                                });
+                              },
                             ),
                             const SizedBox(
                               width: 10,
                             ),
-                            Text("1"),
+                            Text(
+                              ordersList[index]['quantity'].toString(),
+                            ),
                             const SizedBox(
                               width: 10,
                             ),
                             InkWell(
+                              onTap: () {
+                                ShoppingCart().addItem(ordersList[index]);
+                                setState(() {
+                                  log(ordersList.toString());
+                                });
+                              },
                               child: Image.asset(
                                 "assets/images/Icon_plus.png",
                                 width: 24,
@@ -240,7 +270,7 @@ class _OrdersViewState extends State<OrdersView> {
                   );
                 },
                 separatorBuilder: (context, index) => const Divider(),
-                itemCount: CoffeeShopItems().orderedItems.length,
+                itemCount: ordersList.length,
               ),
             ),
             const SizedBox(
@@ -274,7 +304,7 @@ class _OrdersViewState extends State<OrdersView> {
                   ),
                 ),
                 Text(
-                  "4.53",
+                  "\$ 4.53",
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w100,
@@ -308,7 +338,7 @@ class _OrdersViewState extends State<OrdersView> {
                   width: 10,
                 ),
                 Text(
-                  "\$ 1.0",
+                  "\$ ${ShoppingCart().totalCartPrice.toStringAsFixed(2)}",
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w100,
@@ -317,13 +347,13 @@ class _OrdersViewState extends State<OrdersView> {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Container(
               height: 165,
               width: double.infinity,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.vertical(
                       bottom: Radius.circular(0), top: Radius.circular(16))),
@@ -361,7 +391,7 @@ class _OrdersViewState extends State<OrdersView> {
                               ),
                             ),
                             Text(
-                              "\$ 5.53",
+                              "\$ ${(ShoppingCart().totalCartPrice + 4.53).toStringAsFixed(2)}",
                               style: TextStyle(
                                 fontSize: 12,
                                 color: CustomColors().brown1,
