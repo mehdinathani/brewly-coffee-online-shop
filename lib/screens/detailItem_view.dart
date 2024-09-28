@@ -232,7 +232,8 @@ class _DetailitemViewState extends State<DetailitemView> {
                         style: TextStyle(color: CustomColors().lighter),
                       ),
                       Text(
-                        '\$ ${widget.coffeeData.price.toStringAsFixed(2)}', // Display formatted price
+                        '\$ ${selectedSizeIndex ==0 ? widget.coffeeData.price.toStringAsFixed(2) :selectedSizeIndex ==1  ? (1.5+ widget.coffeeData.price).toStringAsFixed(2) :  (2.5+ widget.coffeeData.price).toStringAsFixed(2)}', // Display formatted price
+                        // '\$ ${widget.coffeeData.price.toStringAsFixed(2)}', // Display formatted price
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -264,6 +265,7 @@ class _DetailitemViewState extends State<DetailitemView> {
                   )
                 ],
               ),
+              SizedBox(height: 20,)
             ],
           ),
         ),
