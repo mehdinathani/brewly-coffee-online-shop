@@ -1,11 +1,12 @@
 import 'dart:developer';
 
 import 'package:brewly/components/button.dart';
+import 'package:brewly/components/cart_bage.dart';
 import 'package:brewly/components/coffee_card.dart';
 import 'package:brewly/components/custom_colors.dart';
-import 'package:brewly/components/global.dart';
 import 'package:brewly/components/item_card.dart';
 import 'package:brewly/data/data.dart';
+import 'package:brewly/functions/shopping_cart.dart';
 import 'package:brewly/screens/detailItem_view.dart';
 import 'package:flutter/material.dart';
 
@@ -67,12 +68,21 @@ class _HomeViewState extends State<HomeView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 50),
-                        const Text(
-                          "Location",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Color(0xffA2A2A2),
-                          ),
+                        const Row(
+                          children: [
+                            Text(
+                              "Location",
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Color(0xffA2A2A2),
+                              ),
+                            ),
+                            Spacer(),
+                            CartBage(),
+                            SizedBox(
+                              width: 20,
+                            )
+                          ],
                         ),
                         const SizedBox(height: 10),
                         const Row(
@@ -84,7 +94,7 @@ class _HomeViewState extends State<HomeView> {
                             Icon(
                               Icons.keyboard_arrow_down,
                               color: Color(0xffD8D8D8),
-                            )
+                            ),
                           ],
                         ),
                         Row(
@@ -190,6 +200,16 @@ class _HomeViewState extends State<HomeView> {
                             itemCount: filteredItems.length,
                             itemBuilder: (context, index) {
                               return ItemCard(
+                                onButtonTap: () {
+                                  ShoppingCart().addItem(
+                                    filteredItems[index],
+                                  );
+                                  setState(() {
+                                    log(
+                                      ShoppingCart().orderedItems.toString(),
+                                    );
+                                  });
+                                },
                                 onTap: () {
                                   log("");
                                   Navigator.push(context, MaterialPageRoute(

@@ -1,3 +1,4 @@
+import 'package:brewly/components/bottom_navbar.dart';
 import 'package:brewly/screens/detailItem_view.dart';
 import 'package:brewly/screens/home_view.dart';
 import 'package:brewly/screens/onboarding_view.dart';
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: const OnboardingView(),
+      home: const BottomNavbar(),
     );
   }
 }

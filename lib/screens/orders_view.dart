@@ -177,101 +177,110 @@ class _OrdersViewState extends State<OrdersView> {
             ),
             const Divider(),
             Expanded(
-              child: ListView.separated(
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return Container(
-                    child: Row(
-                      children: [
-                        Column(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Image.asset(
-                                ordersList[index]['img'][0],
-                                width: 54,
-                                height: 54,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              ordersList[index]['name'],
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: CustomColors().dark,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            Text(
-                              ordersList[index]['tags'][0],
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: CustomColors().lighter,
-                                fontWeight: FontWeight.w100,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        const Spacer(),
-                        Row(
-                          children: [
-                            InkWell(
-                              child: Image.asset(
-                                "assets/images/Icon_minus.png",
-                                width: 24,
-                                height: 24,
-                              ),
-                              onTap: () {
-                                ShoppingCart().lessItem(
-                                  ordersList[index],
-                                );
-                                setState(() {
-                                  log(ShoppingCart().orderedItems.toString());
-                                });
-                              },
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              ordersList[index]['quantity'].toString(),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                ShoppingCart().addItem(ordersList[index]);
-                                setState(() {
-                                  log(ordersList.toString());
-                                });
-                              },
-                              child: Image.asset(
-                                "assets/images/Icon_plus.png",
-                                width: 24,
-                                height: 24,
-                              ),
-                            )
-                          ],
-                        )
+              child: ordersList.isEmpty
+                  ? ListView(
+                      children: const [
+                        Text(
+                            "You havn't Selected any Coffee yet,\nWould you like have some\nAI suggestions?"),
                       ],
+                    )
+                  : ListView.separated(
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          child: Row(
+                            children: [
+                              Column(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Image.asset(
+                                      ordersList[index]['img'][0],
+                                      width: 54,
+                                      height: 54,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    ordersList[index]['name'],
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: CustomColors().dark,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Text(
+                                    ordersList[index]['tags'][0],
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: CustomColors().lighter,
+                                      fontWeight: FontWeight.w100,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              const Spacer(),
+                              Row(
+                                children: [
+                                  InkWell(
+                                    child: Image.asset(
+                                      "assets/images/Icon_minus.png",
+                                      width: 24,
+                                      height: 24,
+                                    ),
+                                    onTap: () {
+                                      ShoppingCart().lessItem(
+                                        ordersList[index],
+                                      );
+                                      setState(() {
+                                        log(ShoppingCart()
+                                            .orderedItems
+                                            .toString());
+                                      });
+                                    },
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    ordersList[index]['quantity'].toString(),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      ShoppingCart().addItem(ordersList[index]);
+                                      setState(() {
+                                        log(ordersList.toString());
+                                      });
+                                    },
+                                    child: Image.asset(
+                                      "assets/images/Icon_plus.png",
+                                      width: 24,
+                                      height: 24,
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) => const Divider(),
+                      itemCount: ordersList.length,
                     ),
-                  );
-                },
-                separatorBuilder: (context, index) => const Divider(),
-                itemCount: ordersList.length,
-              ),
             ),
             const SizedBox(
               height: 10,

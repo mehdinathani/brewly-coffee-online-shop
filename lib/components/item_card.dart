@@ -8,6 +8,7 @@ class ItemCard extends StatelessWidget {
   final String catergory;
   final num price;
   final Function()? onTap;
+  final Function()? onButtonTap;
 
   const ItemCard({
     super.key,
@@ -16,6 +17,7 @@ class ItemCard extends StatelessWidget {
     required this.catergory,
     required this.price,
     this.onTap,
+    this.onButtonTap,
   });
 
   @override
@@ -84,6 +86,7 @@ class ItemCard extends StatelessWidget {
                       Spacer(),
                       // IconButton(onPressed: () {}, icon: Icon(Icons.add))
                       GestureDetector(
+                        onTap: onButtonTap,
                         child: Image.asset("assets/images/addbutton.jpg"),
                       ),
                       SizedBox(
