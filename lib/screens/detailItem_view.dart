@@ -265,7 +265,7 @@ class _DetailitemViewState extends State<DetailitemView> {
                   )
                 ],
               ),
-              SizedBox(height: 20,)
+              const SizedBox(height: 20,)
             ],
           ),
         ),
