@@ -201,7 +201,7 @@ class _HomeViewState extends State<HomeView> {
                                   height: 200,
                                   width: 200,
                                 ),
-                                Text(
+                                const Text(
                                   "No items found",
                                   style: TextStyle(
                                     color: Color(0xff2A2A2A),
@@ -216,8 +216,9 @@ class _HomeViewState extends State<HomeView> {
                         child: Padding(
                            padding: const EdgeInsets.symmetric(horizontal: 35),
                           child: GridView.builder(
-                            // physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
+                            //TODO : remove scroll of this and use parent single child scroll view
+                             // physics: const NeverScrollableScrollPhysics(),
+                            // shrinkWrap: true,
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
                                     childAspectRatio: (mediaWidth * 0.4) /
