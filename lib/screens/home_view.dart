@@ -53,6 +53,7 @@ class _HomeViewState extends State<HomeView> {
         mediaHeight - appBarH; // Calculating remaining height for body
 
     return Scaffold(
+      backgroundColor: Colors.white,
       extendBody: true,
       body: SingleChildScrollView(
         child: Stack(

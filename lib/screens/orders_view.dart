@@ -34,7 +34,9 @@ class _OrdersViewState extends State<OrdersView> {
     final mediaW = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         centerTitle: true,
         // leading: InkWell(
         //   child: const Icon(Icons.arrow_back_ios_new),
@@ -51,7 +53,7 @@ class _OrdersViewState extends State<OrdersView> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.only(left: 24.0 , right: 24.0 ,top: 20 ),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

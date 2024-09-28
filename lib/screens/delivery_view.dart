@@ -8,6 +8,7 @@ class DeliveryView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       // Main content
       body: Stack(
         children: [
