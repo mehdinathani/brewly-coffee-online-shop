@@ -4,14 +4,17 @@ import 'package:brewly/components/button.dart';
 import 'package:brewly/components/coffee_card.dart';
 import 'package:brewly/components/custom_colors.dart';
 import 'package:brewly/data/data.dart';
+import 'package:brewly/domain/coffee_model.dart';
 import 'package:brewly/functions/shopping_cart.dart';
 import 'package:brewly/screens/orders_view.dart';
 import 'package:flutter/material.dart';
 
 class DetailitemView extends StatefulWidget {
-  final Map<String, dynamic> selectedItem; // Expect the whole item
+  // final Map<String, dynamic> selectedItem;
+  final CoffeeItem coffeeData;
+ bool isFavourite;// Expect the whole item
 
-  const DetailitemView({super.key, required this.selectedItem});
+   DetailitemView({super.key , required this.isFavourite , required this.coffeeData});
 
   @override
   State<DetailitemView> createState() => _DetailitemViewState();
@@ -19,19 +22,7 @@ class DetailitemView extends StatefulWidget {
 
 class _DetailitemViewState extends State<DetailitemView> {
   final ShoppingCart _shoppingCart = ShoppingCart();
-  void addToFavorites(Map<String, dynamic> item) {
-    // Check if item is already in the favorites list
-    if (!CoffeeShopItems().favoriteItems.contains(item)) {
-      setState(() {
-        CoffeeShopItems()
-            .favoriteItems
-            .add(item); // Add item to the favorites list
-      });
-      log("${item['name']} added to favorites");
-    } else {
-      log("${item['name']} is already in favorites");
-    }
-  }
+
 
   // void addToOrders(Map<String, dynamic> item) {
   //   setState(() {
@@ -74,9 +65,26 @@ class _DetailitemViewState extends State<DetailitemView> {
         actions: [
           InkWell(
               onTap: () {
-                addToFavorites(widget.selectedItem);
+
+                if (!CoffeeShopItems().favoriteItems.contains(widget.coffeeData)) {
+                  setState(() {
+                    CoffeeShopItems()
+                        .favoriteItems
+                        .add(widget.coffeeData); // Add item to the favorites list
+                  });
+                  log("${widget.coffeeData.name} added to favorites");
+                } else {
+                  CoffeeShopItems().favoriteItems.remove(widget.coffeeData);
+                  log("${widget.coffeeData.name} is already in favorites");
+                }
+                setState(() {});
               },
-              child: const Icon(Icons.favorite_border)),
+              child: Icon(
+                CoffeeShopItems()
+                    .favoriteItems
+                    .contains(widget.coffeeData) == true ? Icons.favorite :Icons.favorite_border , // Unselected favorite icon
+                color: Colors.redAccent,
+              ),),
           const SizedBox(
             width: 20,
           )
@@ -95,7 +103,7 @@ class _DetailitemViewState extends State<DetailitemView> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16),
                     child: Image.asset(
-                      widget.selectedItem['img'][0], // Display the item's image
+                      widget.coffeeData.img[0], // Display the item's image
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -112,7 +120,7 @@ class _DetailitemViewState extends State<DetailitemView> {
                     children: [
                       Text(
                         textAlign: TextAlign.left,
-                        widget.selectedItem['name'],
+                        widget.coffeeData.name,
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w600,
@@ -123,7 +131,7 @@ class _DetailitemViewState extends State<DetailitemView> {
                         height: 10,
                       ),
                       Text(
-                        widget.selectedItem['tags'][0],
+                        widget.coffeeData.tags[0],
                         style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.normal,
@@ -164,7 +172,7 @@ class _DetailitemViewState extends State<DetailitemView> {
                 ),
               ),
               Text(
-                widget.selectedItem['description'],
+                widget.coffeeData.description,
                 style: TextStyle(
                   fontSize: 14,
                   color: CustomColors().lightgrey,
@@ -222,7 +230,7 @@ class _DetailitemViewState extends State<DetailitemView> {
                         style: TextStyle(color: CustomColors().lighter),
                       ),
                       Text(
-                        '\$ ${widget.selectedItem['price'].toStringAsFixed(2)}', // Display formatted price
+                        '\$ ${widget.coffeeData.price.toStringAsFixed(2)}', // Display formatted price
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -238,7 +246,7 @@ class _DetailitemViewState extends State<DetailitemView> {
                         buttonText: "Buy Now",
                         onTap: () {
                           // addToOrders(widget.selectedItem);
-                          ShoppingCart().addItem(widget.selectedItem);
+                          ShoppingCart().addItem(widget.coffeeData);
                           log(_shoppingCart.orderedItems.toString());
                           setState(() {});
                           // log(CoffeeShopItems().orderedItems.toString());

@@ -2,9 +2,11 @@ import 'dart:developer';
 
 import 'package:brewly/components/item_card.dart';
 import 'package:brewly/data/data.dart';
+import 'package:brewly/data/temp_data.dart';
 import 'package:brewly/functions/shopping_cart.dart';
 import 'package:brewly/screens/detailItem_view.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class FavView extends StatefulWidget {
   const FavView({super.key});
@@ -14,24 +16,44 @@ class FavView extends StatefulWidget {
 }
 
 class _FavViewState extends State<FavView> {
-  List favList = CoffeeShopItems().favoriteItems;
 
   @override
   Widget build(BuildContext context) {
     final mediaWidth = MediaQuery.of(context).size.width;
     final mediaHeight = MediaQuery.of(context).size.height;
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        leading: InkWell(
-          child: const Icon(Icons.arrow_back_ios_new),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+        // leading: InkWell(
+        //
+        //   child: const Icon(Icons.arrow_back_ios_new),
+        //   onTap: () {
+        //     Navigator.pop(context);
+        //   },
+        // ),
         centerTitle: true,
         title: const Text("Favourite"),
       ),
-      body: Padding(
+      body: CoffeeShopItems().favoriteItems.length == 0 ?Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+           Lottie.asset('assets/images/nofavjson.json', height: mediaHeight - 400, width: mediaWidth -100),
+            Text(
+              "No Favourite Found",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ) : Padding(
+
+
         padding: const EdgeInsets.symmetric(horizontal: 45),
         child: GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -39,12 +61,21 @@ class _FavViewState extends State<FavView> {
               crossAxisSpacing: 20,
               crossAxisCount: 2,
               mainAxisSpacing: 20),
-          itemCount: favList.length,
+          itemCount: CoffeeShopItems().favoriteItems.length,
           itemBuilder: (context, index) {
             return ItemCard(
+              isFavorite: CoffeeShopItems()
+                  .favoriteItems
+                  .contains(CoffeeShopItems().favoriteItems[index]),
+              onFavoriteTap: () {
+
+                  CoffeeShopItems().favoriteItems.remove(CoffeeShopItems().favoriteItems[index]);
+
+                setState(() {});
+              },
               onButtonTap: () {
                 ShoppingCart().addItem(
-                  favList[index],
+                  CoffeeShopItems().favoriteItems[index],
                 );
                 setState(() {
                   log(
@@ -57,15 +88,16 @@ class _FavViewState extends State<FavView> {
                 Navigator.push(context, MaterialPageRoute(
                   builder: (context) {
                     return DetailitemView(
-                      selectedItem: favList[index], // Pass the selected item
+                      coffeeData: CoffeeShopItems().favoriteItems[index],
+                      isFavourite: CoffeeShopItems()
+                          .favoriteItems
+                          .contains(CoffeeShopItems().favoriteItems[index]),
+                      // selectedItem: CoffeeShopItems().favoriteItems[index], // Pass the selected item
                     );
                   },
                 ));
               },
-              itemName: favList[index]['name'],
-              catergory: favList[index]['category'],
-              imagePath: favList[index]['img'][0],
-              price: favList[index]['price'],
+              coffeeData: CoffeeShopItems().favoriteItems[index],
             );
           },
         ),

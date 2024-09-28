@@ -1,4 +1,5 @@
 import 'package:brewly/components/custom_colors.dart';
+import 'package:brewly/screens/call_screen.dart';
 import 'package:flutter/material.dart';
 
 class DeliveryView extends StatelessWidget {
@@ -151,8 +152,12 @@ class DeliveryView extends StatelessWidget {
                           ],
                         ),
                         const Spacer(),
-                        Image.asset(
-                          "assets/images/Call.png",
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => CallScreen(),));                          },
+                          child: Image.asset(
+                            "assets/images/Call.png",
+                          ),
                         )
                       ],
                     )

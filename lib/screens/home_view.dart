@@ -6,9 +6,11 @@ import 'package:brewly/components/coffee_card.dart';
 import 'package:brewly/components/custom_colors.dart';
 import 'package:brewly/components/item_card.dart';
 import 'package:brewly/data/data.dart';
+import 'package:brewly/domain/coffee_model.dart';
 import 'package:brewly/functions/shopping_cart.dart';
 import 'package:brewly/screens/detailItem_view.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -18,10 +20,10 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  int? selectedFlavorIndex;
-  List items = CoffeeShopItems().itemList;
+  int selectedFlavorIndex = 0;
+  List <CoffeeItem> items = CoffeeShopItems().itemList;
   String? selectedCategory;
-  List filteredItems = []; // Filtered coffee list
+  List <CoffeeItem>filteredItems = []; // Filtered coffee list
   List coffeeFlavors = CoffeeShopItems().coffeeFlavors;
 
   @override
@@ -37,7 +39,7 @@ class _HomeViewState extends State<HomeView> {
       filteredItems = items; // Show all items if no category is selected
     } else {
       filteredItems =
-          items.where((item) => item['category'] == category).toList();
+          items.where((item) => item.category == category).toList();
     }
     setState(() {}); // Update the UI
   }
@@ -52,10 +54,10 @@ class _HomeViewState extends State<HomeView> {
 
     return Scaffold(
       extendBody: true,
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            child: Column(
+      body: SingleChildScrollView(
+        child: Stack(
+          children: [
+            Column(
               children: [
                 // AppBar Section
                 Container(
@@ -109,6 +111,7 @@ class _HomeViewState extends State<HomeView> {
                               child: const Row(
                                 children: [
                                   SizedBox(width: 10),
+
                                   Icon(
                                     Icons.search,
                                     color: Color(0xffFFFFFF),
@@ -186,10 +189,34 @@ class _HomeViewState extends State<HomeView> {
                       // const SizedBox(
                       //   height: 20,
                       // ),
+                      filteredItems.length == 0
+                          ? Center(
+                            child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Lottie.asset(
+                                  "assets/images/nodataJson.json",
+                                  height: 200,
+                                  width: 200,
+                                ),
+                                Text(
+                                  "No items found",
+                                  style: TextStyle(
+                                    color: Color(0xff2A2A2A),
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                          :
                       Expanded(
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 45),
+                           padding: const EdgeInsets.symmetric(horizontal: 35),
                           child: GridView.builder(
+                            // physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
                                     childAspectRatio: (mediaWidth * 0.4) /
@@ -200,6 +227,23 @@ class _HomeViewState extends State<HomeView> {
                             itemCount: filteredItems.length,
                             itemBuilder: (context, index) {
                               return ItemCard(
+                                isFavorite: CoffeeShopItems()
+                                    .favoriteItems
+                                    .contains(filteredItems[index]),
+                                onFavoriteTap: () {
+                                  if (!CoffeeShopItems().favoriteItems.contains(filteredItems[index])) {
+                                    setState(() {
+                                      CoffeeShopItems()
+                                          .favoriteItems
+                                          .add(filteredItems[index]); // Add item to the favorites list
+                                    });
+                                    log("${filteredItems[index].name} added to favorites");
+                                  } else {
+                                    CoffeeShopItems().favoriteItems.remove(filteredItems[index]);
+                                    log("${filteredItems[index].name} is already in favorites");
+                                  }
+                                  setState(() {});
+                                },
                                 onButtonTap: () {
                                   ShoppingCart().addItem(
                                     filteredItems[index],
@@ -215,43 +259,46 @@ class _HomeViewState extends State<HomeView> {
                                   Navigator.push(context, MaterialPageRoute(
                                     builder: (context) {
                                       return DetailitemView(
-                                        selectedItem: filteredItems[
-                                            index], // Pass the selected item
+                                        coffeeData: filteredItems[index],
+                                        isFavourite: CoffeeShopItems()
+                                            .favoriteItems
+                                            .contains(filteredItems[index]),
+                                        // selectedItem: filteredItems[
+                                        //     index], // Pass the selected item
                                       );
                                     },
                                   ));
                                 },
-                                itemName: filteredItems[index]['name'],
-                                catergory: filteredItems[index]['category'],
-                                imagePath: filteredItems[index]['img'][0],
-                                price: filteredItems[index]['price'],
+                                coffeeData: filteredItems[index],
                               );
                             },
                           ),
+                        
                         ),
                       ),
+
                     ],
                   ),
                 ),
               ],
             ),
-          ),
-          Positioned(
-            top: appBarH -
-                70, // Adjusting position to overlap both AppBar and Body
-            // left: (mediaWidth / 20), // Center horizontally
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.asset(
-                  "assets/images/Banner.jpg",
-                  fit: BoxFit.cover,
+            Positioned(
+              top: appBarH -
+                  70, // Adjusting position to overlap both AppBar and Body
+              // left: (mediaWidth / 20), // Center horizontally
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.asset(
+                    "assets/images/Banner.jpg",
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
