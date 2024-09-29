@@ -1,3 +1,5 @@
+import 'package:brewly/components/button.dart';
+import 'package:brewly/screens/auth_screens/login_screen/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -20,19 +22,35 @@ class _NotificationViewState extends State<NotificationView> {
         centerTitle: true,
         title: const Text("Notifications"),
       ),
-      body:  Center(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Lottie.asset('assets/images/noNotification.json', height: mediaHeight - 400, width: mediaWidth -100),
-            Text(
+            Lottie.asset('assets/images/noNotification.json',
+                height: mediaHeight - 400, width: mediaWidth - 100),
+            const Text(
+              textAlign: TextAlign.center,
               "You havn't any pending notifications.",
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
+            const SizedBox(
+              height: 20,
+            ),
+            CustomButton(
+              buttonText: "Logout",
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoginScreen(),
+                  ),
+                );
+              },
+            )
           ],
         ),
       ),

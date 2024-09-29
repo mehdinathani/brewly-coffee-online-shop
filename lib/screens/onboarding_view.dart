@@ -1,4 +1,6 @@
+import 'package:brewly/components/bottom_navbar.dart';
 import 'package:brewly/components/button.dart';
+import 'package:brewly/screens/auth_screens/login_screen/login_screen.dart';
 import 'package:brewly/screens/home_view.dart';
 import 'package:flutter/material.dart';
 
@@ -96,7 +98,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const HomeView(),
+                        builder: (context) => LoginScreen(),
                       ),
                     );
                   },
